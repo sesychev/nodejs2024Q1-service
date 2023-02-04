@@ -1,15 +1,48 @@
-import { Controller, Get } from '@nestjs/common';
-import { User } from './user.interface';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto, UpdatePasswordDto } from './create-user.dto';
 
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getAll(): Promise<Array<User>> {
-    return this.usersService.getAllUsers();
+  @HttpCode(HttpStatus.OK)
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  post(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.post(createUserDto);
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  put(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
+    return this.usersService.put(id, updatePasswordDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param('id') id: string) {
+    return this.usersService.delete(id);
   }
 }
-//https://github.com/royib/clean-architecture-nestJS/blob/main/src/controllers/book.controller.ts
-//https://betterprogramming.pub/clean-node-js-architecture-with-nestjs-and-typescript-34b9398d790f
