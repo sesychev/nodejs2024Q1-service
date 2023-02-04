@@ -25,6 +25,7 @@ class ClassTrack implements Track {
 
 export class TracksModel {
   private tracks: Array<ClassTrack> = [];
+  static tracks: any;
 
   public async findAll() {
     return this.tracks;
@@ -62,5 +63,17 @@ export class TracksModel {
     if (!track) throw new NotFoundException();
     const index = this.tracks.findIndex((track) => track.id === id);
     this.tracks.splice(index, 1);
+  }
+
+  public async deleteArtist(id: string) {
+    this.tracks.forEach((item) => {
+      if (item.artistId === id) item.artistId = null;
+    });
+  }
+
+  public async deleteAlbum(id: string) {
+    this.tracks.forEach((item) => {
+      if (item.albumId === id) item.albumId = null;
+    });
   }
 }
