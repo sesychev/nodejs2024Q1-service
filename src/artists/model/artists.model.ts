@@ -50,6 +50,6 @@ export class ArtistsModel {
     this.tracks.deleteArtist(id);
     this.tracks.deleteAlbum(id);
     const index = this.artists.findIndex((artist) => artist.id === id);
-    return this.artists.splice(index, 1);
+    this.artists.splice(index, 1);
   }
 }
