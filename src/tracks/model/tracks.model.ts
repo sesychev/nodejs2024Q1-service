@@ -3,12 +3,13 @@ import { Track } from '../interfaces/track.interface';
 import { NotFoundException } from 'src/common/common.errors';
 import { CreateTrackDto, UpdateTrackDto } from '../dto/create-track.dto';
 
-class ClassTrack implements Track {
+export class ClassTrack implements Track {
   id: string; // uuid v4
   name: string;
   artistId: string | null; // refers to Artist
   albumId: string | null; // refers to Album
   duration: number; // integer number
+
   constructor(
     name: string,
     duration: number,
@@ -25,7 +26,6 @@ class ClassTrack implements Track {
 
 export class TracksModel {
   private tracks: Array<ClassTrack> = [];
-  static tracks: any;
 
   public async findAll() {
     return this.tracks;
@@ -59,19 +59,18 @@ export class TracksModel {
   }
 
   public async delete(id: string) {
-    const track = this.tracks.find((track) => track.id === id);
-    if (!track) throw new NotFoundException();
     const index = this.tracks.findIndex((track) => track.id === id);
+    if (index < 0) throw new NotFoundException();
     this.tracks.splice(index, 1);
   }
 
-  public async deleteArtist(id: string) {
+  public async artistNull(id: string) {
     this.tracks.forEach((item) => {
       if (item.artistId === id) item.artistId = null;
     });
   }
 
-  public async deleteAlbum(id: string) {
+  public async albumNull(id: string) {
     this.tracks.forEach((item) => {
       if (item.albumId === id) item.albumId = null;
     });

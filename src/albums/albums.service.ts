@@ -18,13 +18,11 @@ export class AlbumsService {
   }
 
   async post(dto: CreateAlbumDto) {
-    if (typeof dto.name !== 'string') throw new BadRequestException();
     return await this.albumsModel.post(dto);
   }
 
   async put(id: string, dto: UpdateAlbumDto) {
     if (!validate(id)) throw new BadRequestException();
-    if (typeof dto.name !== 'string') throw new BadRequestException();
     return this.albumsModel.put(id, dto);
   }
 

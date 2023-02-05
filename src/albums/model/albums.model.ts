@@ -4,7 +4,7 @@ import { NotFoundException } from 'src/common/common.errors';
 import { CreateAlbumDto, UpdateAlbumDto } from '../dto/create-Album.dto';
 import { TracksModel } from 'src/tracks/model/tracks.model';
 
-class ClassAlbum implements Album {
+export class ClassAlbum implements Album {
   id: string;
   name: string;
   year: number;
@@ -49,11 +49,11 @@ export class AlbumsModel {
   }
 
   public async delete(id: string) {
-    const album = this.albums.find((album) => album.id === id);
-    if (!album) throw new NotFoundException();
-    this.tracks.deleteAlbum(id);
-    this.tracks.deleteAlbum(id);
     const index = this.albums.findIndex((album) => album.id === id);
+    if (index < 0) throw new NotFoundException();
+
+    await this.tracks.albumNull(id);
+
     this.albums.splice(index, 1);
   }
 }

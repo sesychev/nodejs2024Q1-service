@@ -18,13 +18,11 @@ export class ArtistsService {
   }
 
   async post(dto: CreateArtistDto) {
-    if (typeof dto.name !== 'string') throw new BadRequestException();
     return await this.artistsModel.post(dto);
   }
 
   async put(id: string, dto: UpdateArtistDto) {
     if (!validate(id)) throw new BadRequestException();
-    if (typeof dto.name !== 'string') throw new BadRequestException();
     return this.artistsModel.put(id, dto);
   }
 

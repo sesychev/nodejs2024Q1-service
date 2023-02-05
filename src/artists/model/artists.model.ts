@@ -4,10 +4,11 @@ import { NotFoundException } from 'src/common/common.errors';
 import { CreateArtistDto, UpdateArtistDto } from '../dto/create-Artist.dto';
 import { TracksModel } from 'src/tracks/model/tracks.model';
 
-class ClassArtist implements Artist {
+export class ClassArtist implements Artist {
   id: string; // uuid v4
   name: string;
   grammy: boolean;
+
   constructor(name: string, grammy: boolean) {
     this.id = v4();
     this.name = name;
@@ -45,11 +46,12 @@ export class ArtistsModel {
   }
 
   public async delete(id: string) {
-    const artist = this.artists.find((artist) => artist.id === id);
-    if (!artist) throw new NotFoundException();
-    this.tracks.deleteArtist(id);
-    this.tracks.deleteAlbum(id);
     const index = this.artists.findIndex((artist) => artist.id === id);
+    if (index < 0) throw new NotFoundException();
+
+    await this.tracks.albumNull(id);
+    await this.tracks.artistNull(id);
+
     this.artists.splice(index, 1);
   }
 }

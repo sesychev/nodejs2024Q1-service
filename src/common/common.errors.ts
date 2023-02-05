@@ -17,3 +17,9 @@ export class NotFoundException extends HttpException {
     super('404 Not Found', HttpStatus.NOT_FOUND);
   }
 }
+
+export class UnprocessableEntityException extends HttpException {
+  constructor() {
+    super('422 Unprocessable Entity', HttpStatus.UNPROCESSABLE_ENTITY);
+  }
+}

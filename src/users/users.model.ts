@@ -42,9 +42,9 @@ export class UsersModel {
   }
 
   public async findOne(id: string) {
-    const user = this.users.find((user) => user.id === id);
-    if (!user) throw new NotFoundException();
-    return user.show();
+    const index = this.findUserIndex(id);
+    if (index < 0) throw new NotFoundException();
+    return this.users.find((user) => user.id === id).show();
   }
 
   public async post(dto: CreateUserDto) {
@@ -54,8 +54,9 @@ export class UsersModel {
   }
 
   public async put(id: string, dto: UpdatePasswordDto) {
+    const index = this.findUserIndex(id);
+    if (index < 0) throw new NotFoundException();
     const user = this.users.find((user) => user.id === id);
-    if (!user) throw new NotFoundException();
     if (user.password !== dto.oldPassword) throw new ForbiddenException();
     user.password = dto.newPassword;
     user.version += 1;
@@ -64,14 +65,12 @@ export class UsersModel {
   }
 
   public async delete(id: string) {
-    const user = this.users.find((user) => user.id === id);
-    if (!user) throw new NotFoundException();
-    const index = this.users.findIndex((user) => user.id === id);
+    const index = this.findUserIndex(id);
+    if (index < 0) throw new NotFoundException();
     this.users.splice(index, 1);
   }
 
-  public async password(id: string, dto: UpdatePasswordDto) {
-    const user = this.users.find((user) => user.id === id);
-    return user.password === dto.oldPassword;
+  private findUserIndex(id: string) {
+    return this.users.findIndex((user) => user.id === id);
   }
 }

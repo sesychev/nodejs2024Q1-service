@@ -22,9 +22,8 @@ export class TracksService {
   }
 
   async put(id: string, dto: UpdateTrackDto) {
-    if (!validate(id)) throw new BadRequestException();
-    if (typeof dto.name !== 'string') throw new BadRequestException();
-    return this.tracksModel.put(id, dto);
+    if (validate(id)) return this.tracksModel.put(id, dto);
+    else throw new BadRequestException();
   }
 
   async delete(id: string) {
