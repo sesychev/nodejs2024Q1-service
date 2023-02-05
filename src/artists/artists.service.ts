@@ -12,6 +12,10 @@ export class ArtistsService {
     return await this.artistsModel.findAll();
   }
 
+  async findArtistIndex(id: string) {
+    return this.artistsModel.findArtistIndex(id);
+  }
+
   async findOne(id: string) {
     if (validate(id)) return await this.artistsModel.findOne(id);
     else throw new BadRequestException();
@@ -29,5 +33,10 @@ export class ArtistsService {
   async delete(id: string) {
     if (validate(id)) return await this.artistsModel.delete(id);
     else throw new BadRequestException();
+  }
+
+  async findArtist(id: string) {
+    const artist = this.artistsModel.findArtist(id);
+    return artist;
   }
 }

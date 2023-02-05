@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import { Track } from '../interfaces/track.interface';
 import { NotFoundException } from 'src/common/common.errors';
 import { CreateTrackDto, UpdateTrackDto } from '../dto/create-track.dto';
+import { FavoritesModel } from 'src/favorites/favorites/favorites.model';
 
 export class ClassTrack implements Track {
   id: string; // uuid v4
@@ -25,6 +26,8 @@ export class ClassTrack implements Track {
 }
 
 export class TracksModel {
+  favorites = new FavoritesModel();
+
   private tracks: Array<ClassTrack> = [];
 
   public async findAll() {
@@ -74,5 +77,9 @@ export class TracksModel {
     this.tracks.forEach((item) => {
       if (item.albumId === id) item.albumId = null;
     });
+  }
+
+  findTrack(id: string) {
+    return this.tracks.find((item) => item.id === id);
   }
 }

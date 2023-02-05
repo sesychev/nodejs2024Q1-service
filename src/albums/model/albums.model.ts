@@ -52,8 +52,12 @@ export class AlbumsModel {
     const index = this.albums.findIndex((album) => album.id === id);
     if (index < 0) throw new NotFoundException();
 
-    await this.tracks.albumNull(id);
-
     this.albums.splice(index, 1);
+
+    await this.tracks.albumNull(id);
+  }
+
+  findAlbum(id: string) {
+    return this.albums.find((item) => item.id === id);
   }
 }

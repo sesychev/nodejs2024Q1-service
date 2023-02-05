@@ -30,4 +30,8 @@ export class TracksService {
     if (validate(id)) return await this.tracksModel.delete(id);
     else throw new BadRequestException();
   }
+
+  async findTack(id: string) {
+    return this.tracksModel.findTrack(id);
+  }
 }

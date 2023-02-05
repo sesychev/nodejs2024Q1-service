@@ -30,4 +30,9 @@ export class AlbumsService {
     if (validate(id)) return await this.albumsModel.delete(id);
     else throw new BadRequestException();
   }
+
+  async findAlbum(id: string) {
+    const artist = this.albumsModel.findAlbum(id);
+    return artist;
+  }
 }

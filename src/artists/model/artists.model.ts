@@ -49,9 +49,17 @@ export class ArtistsModel {
     const index = this.artists.findIndex((artist) => artist.id === id);
     if (index < 0) throw new NotFoundException();
 
+    this.artists.splice(index, 1);
+
     await this.tracks.albumNull(id);
     await this.tracks.artistNull(id);
+  }
 
-    this.artists.splice(index, 1);
+  public findArtistIndex(id: string) {
+    return this.artists.findIndex((item) => item.id === id);
+  }
+
+  findArtist(id: string) {
+    return this.artists.find((item) => item.id === id);
   }
 }
