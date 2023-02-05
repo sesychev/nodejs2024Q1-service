@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 import { Track } from '../interfaces/track.interface';
 import { NotFoundException } from 'src/common/common.errors';
 import { CreateTrackDto, UpdateTrackDto } from '../dto/create-track.dto';
-import { FavoritesModel } from 'src/favorites/favorites/favorites.model';
+import { FavoritesModel } from 'src/favorites/favorites.model';
 
 export class ClassTrack implements Track {
   id: string; // uuid v4
