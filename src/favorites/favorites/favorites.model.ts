@@ -1,9 +1,5 @@
-import {
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common/exceptions';
+import { NotFoundException } from '@nestjs/common/exceptions';
 import { Favorites } from './interfaces/favorite.interface';
-import { TracksService } from 'src/tracks/tracks.service';
 
 export class FavoritesModel implements Favorites {
   artists: string[];
