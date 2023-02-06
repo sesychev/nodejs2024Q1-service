@@ -64,7 +64,9 @@ export class TracksModel {
   public async delete(id: string) {
     const index = this.tracks.findIndex((track) => track.id === id);
     if (index < 0) throw new NotFoundException();
+
     this.tracks.splice(index, 1);
+    await this.favorites.deleteTrack(id);
   }
 
   public async artistNull(id: string) {

@@ -3,6 +3,7 @@ import { Artist } from '../interfaces/Artist.interface';
 import { NotFoundException } from 'src/common/common.errors';
 import { CreateArtistDto, UpdateArtistDto } from '../dto/create-Artist.dto';
 import { TracksModel } from 'src/tracks/model/tracks.model';
+import { FavoritesModel } from 'src/favorites/favorites.model';
 
 export class ClassArtist implements Artist {
   id: string; // uuid v4
@@ -18,6 +19,7 @@ export class ClassArtist implements Artist {
 
 export class ArtistsModel {
   tracks = new TracksModel();
+  favorites = new FavoritesModel();
 
   private artists: Array<ClassArtist> = [];
 
@@ -50,9 +52,9 @@ export class ArtistsModel {
     if (index < 0) throw new NotFoundException();
 
     this.artists.splice(index, 1);
-
     await this.tracks.albumNull(id);
     await this.tracks.artistNull(id);
+    await this.favorites.deleteArtist(id);
   }
 
   public findArtistIndex(id: string) {

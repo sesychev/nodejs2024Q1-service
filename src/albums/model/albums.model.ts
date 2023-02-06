@@ -3,6 +3,7 @@ import { Album } from '../interfaces/Album.interface';
 import { NotFoundException } from 'src/common/common.errors';
 import { CreateAlbumDto, UpdateAlbumDto } from '../dto/create-Album.dto';
 import { TracksModel } from 'src/tracks/model/tracks.model';
+import { FavoritesModel } from 'src/favorites/favorites.model';
 
 export class ClassAlbum implements Album {
   id: string;
@@ -20,6 +21,7 @@ export class ClassAlbum implements Album {
 
 export class AlbumsModel {
   tracks = new TracksModel();
+  favorites = new FavoritesModel();
 
   private albums: Array<ClassAlbum> = [];
 
@@ -53,8 +55,8 @@ export class AlbumsModel {
     if (index < 0) throw new NotFoundException();
 
     this.albums.splice(index, 1);
-
     await this.tracks.albumNull(id);
+    await this.favorites.deleteAlbum(id);
   }
 
   findAlbum(id: string) {
