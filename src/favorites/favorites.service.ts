@@ -3,6 +3,7 @@ import { AlbumsService } from 'src/albums/albums.service';
 import { ArtistsService } from 'src/artists/artists.service';
 import { TracksService } from 'src/tracks/tracks.service';
 import { FavoritesModel } from './favorites.model';
+import { NotFoundException } from 'src/common/common.errors';
 
 @Injectable()
 export class FavoritesService {
@@ -40,18 +41,10 @@ export class FavoritesService {
     return this.favoritesModel.postTrack(id);
   }
 
-  async deleteTrack(id: string) {
-    return this.favoritesModel.deleteTrack(id);
-  }
-
   async postArtist(id: string) {
     const item = await this.artistsService.findArtist(id);
     if (!item) throw new UnprocessableEntityException();
     return this.favoritesModel.postArtist(id);
-  }
-
-  async deleteArtist(id: string) {
-    return this.favoritesModel.deleteArtist(id);
   }
 
   async postAlbum(id: string) {
@@ -60,7 +53,21 @@ export class FavoritesService {
     return this.favoritesModel.postAlbum(id);
   }
 
+  async deleteTrack(id: string) {
+    const item = this.favoritesModel.tracks.find((item) => item === id);
+    if (!item) throw new NotFoundException();
+    return this.favoritesModel.deleteTrack(id);
+  }
+
+  async deleteArtist(id: string) {
+    const item = this.favoritesModel.artists.find((item) => item === id);
+    if (!item) throw new NotFoundException();
+    return this.favoritesModel.deleteArtist(id);
+  }
+
   async deleteAlbum(id: string) {
+    const item = this.favoritesModel.albums.find((item) => item === id);
+    if (!item) throw new NotFoundException();
     return this.favoritesModel.deleteAlbum(id);
   }
 }
