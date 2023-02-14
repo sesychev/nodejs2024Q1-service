@@ -6,7 +6,8 @@ services:
     container_name: rss-app-container
     env_file: .env
     restart: always
-    network_mode: bridge
+    networks:
+      - rss-net
     command: npm run start:dev
 
     build: 
@@ -26,12 +27,12 @@ services:
     container_name: rss-db-container
     env_file: .env
     restart: always
-
-    network_mode: bridge
+    networks:
+      - rss-net
 
     build: 
       context: .
-      dockerfile: db
+      dockerfile: d
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -51,3 +52,8 @@ services:
 volumes:
   rss_app:
   rss_data:
+
+networks:
+  rss-net:
+    name: rss-net
+    driver: bridge
