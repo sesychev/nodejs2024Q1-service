@@ -1,5 +1,5 @@
-import { Album } from 'src/albums/interfaces/album.interface';
-import { Artist } from 'src/artists/interfaces/artist.interface';
+import { Album } from 'src/albums/interfaces/Album.interface';
+import { Artist } from 'src/artists/interfaces/Artist.interface';
 import { Track } from 'src/tracks/interfaces/track.interface';
 
 export interface Favorites {
