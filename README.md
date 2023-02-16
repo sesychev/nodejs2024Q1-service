@@ -1,11 +1,6 @@
-# In order to solve potential problem with swagger you should exclude this code from evaluation or use '--force' flag in order to fix this problem.
-# Fix the upstream dependency conflict, or retry npm ERR! this command with --force, or --legacy-peer-deps npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
-
-# Assignment: REST Service
-
+# REST service: Containerization, Docker
 ## Description
 # Home Library Service
-
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
@@ -14,26 +9,40 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/sesychev/nodejs2022Q4-service.git
 ```
+```
+cd nodejs2022Q4-service
+```
+```
+git checkout part-2/docker
+```
+Rename `example.env` to `.env`
 
 ## Installing NPM modules
 
 ```
 npm install
 ```
-
 ## Running application
 
-Rename `example.env` to `.env`
-
 ```
-npm start
+docker-compose up -d --build
 ```
-
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Vulnerabilities scanning
+
+Application
+```
+npm run scan:app
+```
+Database
+```
+npm run scan:db
+```
 
 ## Testing
 
