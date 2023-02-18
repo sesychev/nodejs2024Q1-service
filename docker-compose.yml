@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  rss-app:
+    image: rss-app-image
+    container_name: rss-app-container
+    env_file: .env
+    restart: always
+    networks:
+      - rss-net
+    command: npm run start:dev
+
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: build
+
+    volumes: 
+    - rss_app:/usr/src/app
+    ports: 
+    - "${PORT}:${PORT}"
+    depends_on: 
+    - rss-db
+
+  rss-db:
+    image: rss-db-image
+    container_name: rss-db-container
+    env_file: .env
+    restart: always
+    networks:
+      - rss-net
+
+    build: 
+      context: .
+      dockerfile: db
+    environment:
+      PGDATA: "/var/lib/postgresql/data/rss_data"
+      
+    ports: 
+    - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  rss_app:
+  rss_data:
+
+networks:
+  rss-net:
+    name: rss-net
+    driver: bridge
