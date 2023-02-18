@@ -32,11 +32,8 @@ services:
 
     build: 
       context: .
-      dockerfile: d
+      dockerfile: db
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: "/var/lib/postgresql/data/rss_data"
       
     ports: 
