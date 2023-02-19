@@ -24,11 +24,23 @@ Rename `example.env` to `.env`
 ```
 npm install
 ```
-## Running application
+## Running/stopping application
 
 ```
 docker-compose up -d --build
 ```
+```
+docker-compose down
+```
+
+## Prisma
+```
+npx prisma generate
+```
+```
+npx prisma migrate dev
+```
+
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
@@ -36,10 +48,13 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 ## Vulnerabilities scanning
 
 Application
+
 ```
 npm run scan:app
 ```
+
 Database
+
 ```
 npm run scan:db
 ```

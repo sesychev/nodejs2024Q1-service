@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -18,31 +19,34 @@ export class UsersController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.usersService.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  post(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.post(createUserDto);
+  async post(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.post(createUserDto);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  put(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
-    return this.usersService.put(id, updatePasswordDto);
+  async put(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ) {
+    return await this.usersService.put(id, updatePasswordDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: string) {
-    return this.usersService.delete(id);
+  async delete(@Param('id', ParseUUIDPipe) id: string) {
+    return await this.usersService.delete(id);
   }
 }

@@ -1,37 +1,54 @@
 import { Injectable } from '@nestjs/common';
-import { TracksModel } from '../tracks/model/tracks.model';
-import { validate } from 'uuid';
-import { BadRequestException } from 'src/common/common.errors';
+import { NotFoundException } from 'src/common/common.errors';
 import { CreateTrackDto, UpdateTrackDto } from './dto/create-track.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TracksService {
-  constructor(private readonly tracksModel: TracksModel) {}
+  constructor(private readonly tracksModel: PrismaService) {}
 
   async findAll() {
-    return await this.tracksModel.findAll();
+    return await this.tracksModel.track.findMany();
+  }
+
+  async findID(id: string) {
+    return await this.tracksModel.track.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 
   async findOne(id: string) {
-    if (validate(id)) return await this.tracksModel.findOne(id);
-    else throw new BadRequestException();
+    const item = await this.findID(id);
+
+    if (!item) throw new NotFoundException();
   }
 
   async post(dto: CreateTrackDto) {
-    return await this.tracksModel.post(dto);
+    return await this.tracksModel.track.create({
+      data: dto,
+    });
   }
 
   async put(id: string, dto: UpdateTrackDto) {
-    if (validate(id)) return this.tracksModel.put(id, dto);
-    else throw new BadRequestException();
+    const item = await this.findID(id);
+
+    if (!item) throw new NotFoundException();
+
+    return await this.tracksModel.track.update({
+      where: { id },
+      data: dto,
+    });
   }
 
   async delete(id: string) {
-    if (validate(id)) return await this.tracksModel.delete(id);
-    else throw new BadRequestException();
-  }
+    const item = await this.findID(id);
 
-  async findTack(id: string) {
-    return this.tracksModel.findTrack(id);
+    if (!item) throw new NotFoundException();
+
+    return await this.tracksModel.track.delete({
+      where: { id: id },
+    });
   }
 }

@@ -1,38 +1,65 @@
 import { Injectable } from '@nestjs/common';
-import { AlbumsModel } from './model/albums.model';
-import { validate } from 'uuid';
-import { BadRequestException } from 'src/common/common.errors';
+import { NotFoundException } from 'src/common/common.errors';
 import { CreateAlbumDto, UpdateAlbumDto } from './dto/create-Album.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class AlbumsService {
-  constructor(private readonly albumsModel: AlbumsModel) {}
+  constructor(private readonly albumsModel: PrismaService) {}
 
   async findAll() {
-    return await this.albumsModel.findAll();
+    return await this.albumsModel.album.findMany();
+  }
+
+  async findID(id: string) {
+    return await this.albumsModel.album.findUnique({
+      where: {
+        id: id,
+      },
+    });
   }
 
   async findOne(id: string) {
-    if (validate(id)) return await this.albumsModel.findOne(id);
-    else throw new BadRequestException();
+    const item = await this.findID(id);
+
+    if (!item) throw new NotFoundException();
   }
 
   async post(dto: CreateAlbumDto) {
-    return await this.albumsModel.post(dto);
+    const item = {
+      id: v4(),
+      ...dto,
+    };
+
+    return await this.albumsModel.album.create({ data: item });
   }
 
   async put(id: string, dto: UpdateAlbumDto) {
-    if (!validate(id)) throw new BadRequestException();
-    return this.albumsModel.put(id, dto);
+    const item = await this.findID(id);
+
+    if (!item) throw new NotFoundException();
+
+    return await this.albumsModel.album.update({
+      where: { id },
+      data: dto,
+    });
   }
 
   async delete(id: string) {
-    if (validate(id)) return await this.albumsModel.delete(id);
-    else throw new BadRequestException();
-  }
+    const item = await this.findID(id);
 
-  async findAlbum(id: string) {
-    const artist = this.albumsModel.findAlbum(id);
-    return artist;
+    if (!item) throw new NotFoundException();
+
+    await this.albumsModel.album.updateMany({
+      where: { artistId: { equals: id } },
+      data: { artistId: null },
+    });
+
+    await this.albumsModel.album.delete({
+      where: { id: id },
+    });
+
+    return item;
   }
 }

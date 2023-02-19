@@ -10,13 +10,61 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique @db.VarChar(255)
-  bio      String?
-  image    String? @db.VarChar(500)
-  password String  @unique @db.VarChar(255)
-  username String  @unique @db.VarChar(255)
+model User {
+  id        String @id @default(uuid())
+  login     String
+  password  String
+  version   Int    @default(1)
+  createdAt Int
+  updatedAt Int
 
-  @@map("users")
+  @@map("user")
+}
+
+model Artist {
+  id          String     @id @default(uuid())
+  name        String
+  grammy      Boolean
+  albums      Album[]
+  tracks      Track[]
+  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId String?
+
+  @@map("artist")
+}
+
+model Track {
+  id          String     @id @default(uuid())
+  name        String
+  artistId    String?    @unique
+  albumId     String?    @unique
+  duration    Int
+  artist      Artist?    @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  albums      Album?     @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId String?
+
+  @@map("track")
+}
+
+model Album {
+  id          String     @id @default(uuid())
+  name        String
+  year        Int
+  artistId    String?    @unique
+  artist      Artist?    @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  tracks      Track[]
+  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId String?
+
+  @@map("album")
+}
+
+model Favorites {
+  id      String   @id @default(uuid())
+  artists Artist[]
+  albums  Album[]
+  tracks  Track[]
+
+  @@map("favs")
 }

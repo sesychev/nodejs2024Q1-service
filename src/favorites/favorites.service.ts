@@ -36,19 +36,19 @@ export class FavoritesService {
   }
 
   async postTrack(id: string) {
-    const item = await this.tracksService.findTack(id);
+    const item = null;
     if (!item) throw new UnprocessableEntityException();
     return this.favoritesModel.postTrack(id);
   }
 
   async postArtist(id: string) {
-    const item = await this.artistsService.findArtist(id);
+    const item = null;
     if (!item) throw new UnprocessableEntityException();
     return this.favoritesModel.postArtist(id);
   }
 
   async postAlbum(id: string) {
-    const item = await this.albumsService.findAlbum(id);
+    const item = null;
     if (!item) throw new UnprocessableEntityException();
     return this.favoritesModel.postAlbum(id);
   }
