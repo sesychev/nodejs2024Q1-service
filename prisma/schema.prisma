@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String @id @default(uuid())
+  login     String
+  password  String
+  version   Int    @default(1)
+  createdAt Int
+  updatedAt Int
+
+  @@map("user")
+}
+
+model Artist {
+  id          String     @id @default(uuid())
+  name        String
+  grammy      Boolean
+  albums      Album[]
+  tracks      Track[]
+  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId String?
+
+  @@map("artist")
+}
+
+model Track {
+  id          String     @id @default(uuid())
+  name        String
+  artistId    String?    @unique
+  albumId     String?    @unique
+  duration    Int
+  artist      Artist?    @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  albums      Album?     @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId String?
+
+  @@map("track")
+}
+
+model Album {
+  id          String     @id @default(uuid())
+  name        String
+  year        Int
+  artistId    String?    @unique
+  artist      Artist?    @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  tracks      Track[]
+  Favorites   Favorites? @relation(fields: [favoritesId], references: [id])
+  favoritesId String?
+
+  @@map("album")
+}
+
+model Favorites {
+  id      String   @id @default(uuid())
+  artists Artist[]
+  albums  Album[]
+  tracks  Track[]
+
+  @@map("favs")
+}
