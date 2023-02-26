@@ -7,6 +7,7 @@ import {
 } from 'src/common/common.errors';
 import { CreateUserDto, UpdatePasswordDto } from './create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -28,6 +29,8 @@ export class UsersService {
     const item = await this.findID(id);
 
     if (!item) throw new NotFoundException();
+
+    return item;
   }
 
   async post(dto: CreateUserDto) {
