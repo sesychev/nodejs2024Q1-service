@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import {
   BadRequestException,
   ForbiddenException,
+  NotFoundException,
 } from 'src/common/common.errors';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/users/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 dotenv.config();
 
 @Injectable()
@@ -64,5 +66,11 @@ export class AuthService {
       access: access,
       refresh: refresh,
     };
+  }
+
+  refresh(refreshTokenDto: RefreshTokenDto) {
+    if (!refreshTokenDto.refreshToken) {
+      throw new NotFoundException();
+    }
   }
 }
