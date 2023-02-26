@@ -27,7 +27,7 @@ npm install
 ## Running/stopping application
 
 ```
-docker-compose up -d --build
+docker-compose up -d
 ```
 ```
 docker-compose down
@@ -38,7 +38,7 @@ docker-compose down
 npx prisma generate
 ```
 ```
-npx prisma migrate dev
+npx prisma migrate dev --name init
 ```
 
 After starting the app on port (4000 as default) you can open
