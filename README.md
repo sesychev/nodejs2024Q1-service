@@ -1,3 +1,9 @@
+# In order to solve potential problem with swagger you should exclude this code from evaluation or use '--force' flag in order to fix this problem.
+# Fix the upstream dependency conflict, or retry npm ERR! this command with --force, or --legacy-peer-deps npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
+
+# Assignment: REST Service
+
+## Description
 # Home Library Service
 
 ## Prerequisites
@@ -18,6 +24,8 @@ npm install
 ```
 
 ## Running application
+
+Rename `example.env` to `.env`
 
 ```
 npm start
