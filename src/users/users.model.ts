@@ -6,7 +6,7 @@ import {
 } from 'src/common/common.errors';
 import { CreateUserDto, UpdatePasswordDto } from './create-user.dto';
 
-class ClassUser implements User {
+export class ClassUser implements User {
   id: string;
   login: string;
   password: string;
